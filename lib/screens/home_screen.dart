@@ -24,12 +24,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               ap.userSignOut().then(
                     (value) => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen(),
-                      ),
-                    ),
-                  );
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WelcomeScreen(),
+                  ),
+                ),
+              );
             },
             icon: const Icon(Icons.exit_to_app, color: Colors.white),
           ),
@@ -37,20 +37,20 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            backgroundImage: NetworkImage(ap.userModel.profilePicture),
-            radius: 50,
-          ),
-          const SizedBox(height: 20),
-          Text(ap.userModel.name),
-          Text(ap.userModel.phoneNumber),
-          Text(ap.userModel.email),
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundImage: NetworkImage(ap.userModel.profilePicture),
+                radius: 50,
+              ),
+              const SizedBox(height: 20),
+              Text(ap.userModel.name),
+              Text(ap.userModel.phoneNumber),
+              Text(ap.userModel.email),
+            ],
+          )),
     );
   }
 }
