@@ -12,7 +12,7 @@ Future<File?> pickImage(context) async {
     }
   } catch (e) {
     if (!context.mounted) return null;
-    showSnackBar(context, "No image selected");
+    showSnackBar(context, "No hay una imagen seleccionada");
     return null;
   }
   return image;
