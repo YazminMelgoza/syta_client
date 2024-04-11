@@ -156,6 +156,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                   itemCount: locations.length,
                   itemBuilder: (context, index) {
                     Map<String, dynamic> locationData = locations[index].data() as Map<String, dynamic>;
+
                     String documentId        = locations[index].id;
                     String locationName      = locationData['name'];
                     String locationAvaliable = locationData['availability'];
@@ -165,13 +166,18 @@ class _LocationsScreen extends State<LocationsScreen> {
 
                     return Center(
                       child: Container(
+                        //width: 200,
+
                         margin: EdgeInsets.all(10),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
                           color: (locationAvaliable=="high") ? Colors.greenAccent : (locationAvaliable=="medium") ? Colors.yellowAccent : Colors.redAccent,
+
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
+                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                           children: [
                             (locationAvaliable=="high") ? Icon(Icons.lock_open_sharp) : (locationAvaliable=="medium") ? Icon(Icons.lock_open_rounded) : Icon(Icons.lock_clock),
 
