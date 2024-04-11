@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/widgets/custom_button.dart';
-import 'package:syta_client/screens/home_screen.dart';      
+import 'package:syta_client/screens/home_screen.dart';
+import 'package:syta_client/screens/main_screen.dart';
 import 'package:syta_client/screens/user_information_screen.dart';
 import 'package:pinput/pinput.dart';
 import 'package:syta_client/utils/show_snack_bar.dart';
@@ -162,7 +163,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                 (value) => Navigator.pushAndRemoveUntil(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => const HomeScreen(),
+                                      builder: (context) => const MainScreen(),
                                     ),
                                     (route) => false),
                               ),
