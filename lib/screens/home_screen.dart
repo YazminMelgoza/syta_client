@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/screens/welcome_screen.dart';
+import 'package:syta_client/screens/inspection_screen.dart';
+import 'package:syta_client/screens/locations_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,12 +26,12 @@ class _HomeScreenState extends State<HomeScreen> {
             onPressed: () {
               ap.userSignOut().then(
                     (value) => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WelcomeScreen(),
-                      ),
-                    ),
-                  );
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const WelcomeScreen(),
+                  ),
+                ),
+              );
             },
             icon: const Icon(Icons.exit_to_app, color: Colors.white),
           ),
@@ -37,20 +39,50 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Center(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: Theme.of(context).colorScheme.secondary,
-            backgroundImage: NetworkImage(ap.userModel.profilePicture),
-            radius: 50,
-          ),
-          const SizedBox(height: 20),
-          Text(ap.userModel.name),
-          Text(ap.userModel.phoneNumber),
-          Text(ap.userModel.email),
-        ],
-      )),
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                backgroundImage: NetworkImage(ap.userModel.profilePicture),
+                radius: 50,
+              ),
+              const SizedBox(height: 20),
+              Text(ap.userModel.name),
+              Text(ap.userModel.phoneNumber),
+              Text(ap.userModel.email),
+              ElevatedButton(
+                onPressed: ()
+                {
+                  if (!context.mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const InspectionScreen(
+                          inspectionId: 'FXfQn1uzcQFDa1DF7AD5'
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Inspeccion FXfQn1uzcQFDa1DF7AD5'),
+              ),
+              ElevatedButton(
+                onPressed: ()
+                {
+                  if (!context.mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LocationsScreen(
+
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Ver Sucursales'),
+              ),
+            ],
+          )),
     );
   }
 }
