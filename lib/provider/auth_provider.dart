@@ -171,7 +171,7 @@ class AuthProvider extends ChangeNotifier {
         email: snapshot['email'],
         createdAt: snapshot['createdAt'],
         uid: snapshot['uid'],
-        profilePicture: snapshot['profilePic'],
+        profilePicture: snapshot['profilePicture'],
         phoneNumber: snapshot['phoneNumber'],
       );
       _uid = userModel.uid;
