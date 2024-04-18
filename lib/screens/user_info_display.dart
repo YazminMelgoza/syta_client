@@ -42,10 +42,10 @@ class _UserScreenState extends State<UserScreen> {
             Row(
               children: [  // Added children property
                 Padding(  // Add padding for left margin
-                  padding: EdgeInsets.only(left: 32.0, top: 35.2),  // Adjust padding as needed
+                  padding: const EdgeInsets.only(left: 32.0, top: 35.2),  // Adjust padding as needed
                   child: Text(
                     ap.userModel.name,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 25.0,  // Increase font size
                       fontWeight: FontWeight.bold,  // Make text bold
                     ),

@@ -1,6 +1,8 @@
 import 'package:syta_client/screens/home_screen.dart';
 import 'package:syta_client/screens/locations_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:syta_client/screens/user_info_display.dart';
+import 'package:syta_client/screens/user_information_screen.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +18,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    final screens = [const HomeScreen(), const LocationsScreen()];
+    final screens = [const HomeScreen(), const LocationsScreen(), const UserInfromationScreen()];
 
     return Scaffold(
 
@@ -47,6 +49,12 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Sucursales',
             backgroundColor: colors.primary,
           ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person_outline),
+            activeIcon: const Icon(Icons.person),
+            label: 'Perfil',
+            backgroundColor: colors.primary,
+          )
         ],
       ),
     );
