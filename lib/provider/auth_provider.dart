@@ -131,7 +131,7 @@ class AuthProvider extends ChangeNotifier {
         userModel.profilePicture = value;
         userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
         userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
-        userModel.uid = _firebaseAuth.currentUser!.phoneNumber!;
+        userModel.uid = _uid!;
       });
       _userModel = userModel;
 
@@ -171,7 +171,7 @@ class AuthProvider extends ChangeNotifier {
         email: snapshot['email'],
         createdAt: snapshot['createdAt'],
         uid: snapshot['uid'],
-        profilePicture: snapshot['profilePic'],
+        profilePicture: snapshot['profilePicture'],
         phoneNumber: snapshot['phoneNumber'],
       );
       _uid = userModel.uid;

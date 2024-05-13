@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/screens/welcome_screen.dart';
+import 'package:syta_client/screens/inspection_screen.dart';
+import 'package:syta_client/screens/locations_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -49,6 +51,36 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(ap.userModel.name),
               Text(ap.userModel.phoneNumber),
               Text(ap.userModel.email),
+              ElevatedButton(
+                onPressed: ()
+                {
+                  if (!context.mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const InspectionScreen(
+                          inspectionId: 'FXfQn1uzcQFDa1DF7AD5'
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Inspeccion FXfQn1uzcQFDa1DF7AD5'),
+              ),
+              ElevatedButton(
+                onPressed: ()
+                {
+                  if (!context.mounted) return;
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const LocationsScreen(
+
+                      ),
+                    ),
+                  );
+                },
+                child: const Text('Ver Sucursales'),
+              ),
             ],
           )),
     );
