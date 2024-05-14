@@ -62,51 +62,59 @@ class CarData extends StatelessWidget {
               ),
               body: SingleChildScrollView(
                 padding: const EdgeInsets.all(20.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    for (var carData in carsData) ...[
-                      Row(
-                        children: [
+                child: Container(
+                  margin: const EdgeInsets.only(top: 20.0),
+                  width: double.infinity,
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        for (var carData in carsData) ...[
+                          Row(
+                            children: [
+                              Text(
+                                'Auto:',
+                                style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => CompletedInspections(
+                                        carName: carData['name'].toString(),
+                                        userId: ap.userModel.uid.toString(),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: Text(
+                                  carData['name'],
+                                  style: const TextStyle(fontSize: 18.0),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 10.0),
                           Text(
-                            'Auto:',
+                            'Placas:',
                             style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                           ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CompletedInspections(
-                                    carName: carData['name'].toString(),
-                                    userId: ap.userModel.uid.toString(),
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              carData['name'],
-                              style: const TextStyle(fontSize: 18.0),
-                            ),
+                          Text(carData['plates'], style: const TextStyle(fontSize: 18.0)),
+                          const SizedBox(height: 10.0),
+                          Text(
+                            'Año:',
+                            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
                           ),
+                          Text(carData['model'], style: const TextStyle(fontSize: 18.0)),
+                          const SizedBox(height: 20.0),
                         ],
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        'Placas:',
-                        style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      Text(carData['plates'], style: const TextStyle(fontSize: 18.0)),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        'Año:',
-                        style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      Text(carData['model'], style: const TextStyle(fontSize: 18.0)),
-                      const SizedBox(height: 20.0),
-                    ],
-                    
-                  ],
+                        
+                      ],
+                    ),
+                  ),
                 ),
               ),
             );
