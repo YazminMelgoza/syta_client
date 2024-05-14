@@ -1,6 +1,7 @@
 import 'package:syta_client/screens/home_screen.dart';
 import 'package:syta_client/screens/locations_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:syta_client/screens/user_cars.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -16,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
 
-    final screens = [const HomeScreen(), const LocationsScreen()];
+    final screens = [const HomeScreen(), const LocationsScreen(), CarData()];
 
     return Scaffold(
 
@@ -45,6 +46,12 @@ class _MainScreenState extends State<MainScreen> {
             icon: const Icon(Icons.location_city_outlined),
             activeIcon: const Icon(Icons.location_city),
             label: 'Sucursales',
+            backgroundColor: colors.primary,
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.car_rental_outlined),
+            activeIcon: const Icon(Icons.car_rental),
+            label: 'Carros',
             backgroundColor: colors.primary,
           ),
         ],
