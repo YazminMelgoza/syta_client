@@ -98,7 +98,7 @@ class _InspectionDetailScreenState extends State<InspectionDetailScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Detallle de Actualización",textAlign: TextAlign.left,
+                      const Text("Detalle de Actualización",textAlign: TextAlign.left,
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
