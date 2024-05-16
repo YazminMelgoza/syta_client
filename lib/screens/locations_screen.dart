@@ -79,7 +79,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                             children: [
                               Container(
                                 width: double.infinity,
-                                color: Colors.greenAccent,
+                                color: Colors.redAccent,
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.only(bottom: 10),
                                 
@@ -102,7 +102,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                               ),
                               Container(
                                 width: double.infinity,
-                                color: Colors.redAccent,
+                                color: Colors.greenAccent,
                                 padding: EdgeInsets.all(10),
                                 margin: EdgeInsets.only(bottom: 10),
                                 child:
@@ -171,7 +171,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                         margin: EdgeInsets.all(10),
                         padding: EdgeInsets.all(10),
                         decoration: BoxDecoration(
-                          color: (locationAvaliable=="high") ? Colors.greenAccent : (locationAvaliable=="medium") ? Colors.yellowAccent : Colors.redAccent,
+                          color: (locationAvaliable=="high") ? Colors.redAccent : (locationAvaliable=="medium") ? Colors.yellowAccent : Colors.greenAccent,
 
                           borderRadius: BorderRadius.circular(10),
                         ),
