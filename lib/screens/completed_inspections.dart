@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:syta_client/screens/inspection_screen.dart';
+
 class CompletedInspections extends StatelessWidget {
   final String carName;
   final String userId;
@@ -65,6 +67,13 @@ class CompletedInspections extends StatelessWidget {
                   Map<String, dynamic> inspectionData = inspections[index].data() as Map<String, dynamic>;
                   String description = inspectionData['description'];
                   String title = inspectionData['title'];
+                  String documentId = inspections[index].id;
+                  String endDate = inspectionData['endDate'];
+                  String startDate = inspectionData['startDate'];
+                  String status = inspectionData['status'];
+                  String carId = inspectionData['carId'];
+
+
 
                   return Center(
                     child: Container(
@@ -82,6 +91,17 @@ class CompletedInspections extends StatelessWidget {
                           ),
                           const SizedBox(width: 10),
                           GestureDetector(
+                            onTap: () {
+                              if (!context.mounted) return;
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>  InspectionScreen(
+                                    inspectionId: documentId,
+                                  ),
+                                ),
+                              );
+                            },
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

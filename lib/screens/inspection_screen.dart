@@ -6,6 +6,8 @@ import 'package:syta_client/screens/inspection_Adddetail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import 'package:syta_client/screens/main_screen.dart';
+
 class InspectionScreen extends StatefulWidget {
   final String inspectionId;
   const InspectionScreen({super.key,required this.inspectionId});
@@ -33,16 +35,13 @@ class _InspectionScreenState extends State<InspectionScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              ap.userSignOut().then(
-                    (value) => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    ),
-                  );
+              Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const MainScreen(),
+                  ), (route) => false);
             },
-            icon: const Icon(Icons.exit_to_app, color: Colors.white),
+            icon: const Icon(Icons.home, color: Colors.white),
           ),
         ],
       ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/screens/pending_inspections.dart';
@@ -14,6 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+
+  String carName = "";
+  String userName = "";
   @override
   Widget build(BuildContext context) {
     final ap = Provider.of<AuthProvider>(context, listen: false);
@@ -38,51 +43,152 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CircleAvatar(
-                backgroundColor: Theme.of(context).colorScheme.secondary,
-                backgroundImage: NetworkImage(ap.userModel.profilePicture),
-                radius: 50,
-              ),
-              const SizedBox(height: 20),
-              Text(ap.userModel.name),
-              Text(ap.userModel.phoneNumber),
-              Text(ap.userModel.email),
-             ElevatedButton(
-                onPressed: () {
-                  if (!context.mounted) return;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PendingInspections(
-                        userId: ap.userModel.uid, // Pasa el userId
-                      ),
-                    ),
-                  );
-                },
-                child: const Text('Inspecciones pendientes'),
-              ),
-              ElevatedButton(
-                onPressed: ()
-                {
-                  if (!context.mounted) return;
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const LocationsScreen(
+      body: Column(
 
-                      ),
-                    ),
-                  );
-                },
-                child: const Text('Ver Sucursales'),
+        children: [
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: const Text(
+                  'Revisiones en Progreso',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
               ),
+
+              SizedBox(height: 10,),
             ],
-          )),
+          ),
+          StreamBuilder<QuerySnapshot>(
+            stream: _firebaseFirestore.collection('inspections')
+                .where("userId", isEqualTo: ap.uid)
+                .where("status", isEqualTo: "EN PROGRESO")
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Text('Error al obtener los datos: ${snapshot.error}');
+              }
+              if (!snapshot.hasData) {
+                return const Text('No hay documentos disponibles');
+              }
+
+              List<QueryDocumentSnapshot> inspections = snapshot.data!.docs;
+
+              return Expanded(
+                child: ListView.builder(
+                  itemCount: inspections.length,
+                  itemBuilder: (context, index)
+                  {
+                    Map<String, dynamic> inspectionData = inspections[index].data() as Map<String, dynamic>;
+                    //Datos de la inspección
+                    String inspectionId    = inspections[index].id;
+                    String carId           = inspectionData['carId'];
+                    String description     = inspectionData['description'];
+                    String endDate         = inspectionData['endDate'];
+                    String estimatedDate   = inspectionData['estimatedDate'];
+                    String locationId      = inspectionData['locationId'];
+                    String startDate       = inspectionData['startDate'];
+                    String status          = inspectionData['status'];
+                    String title           = inspectionData['title'];
+                    String userId          = inspectionData['userId'];
+
+                    int milliseconsDate = int.parse(estimatedDate);
+                    DateTime startNormalDate = DateTime.fromMillisecondsSinceEpoch(milliseconsDate);
+                    String date = "${startNormalDate.year}-${startNormalDate.month.toString().padLeft(2, '0')}-${startNormalDate.day.toString().padLeft(2, '0')}";
+
+                    String userName = userId;
+                    String carName =  carId;
+
+                    Future<String> getCarName(String carId) async {
+                      DocumentSnapshot carSnapshot = await _firebaseFirestore.collection('cars').doc(carId).get();
+                      return carSnapshot.get('name');
+                    }
+                    Future<String> getUserName(String userId) async {
+                      DocumentSnapshot userSnapshot = await _firebaseFirestore.collection('users').doc(userId).get();
+                      return userSnapshot.get('name');
+                    }
+
+                    return FutureBuilder(
+                      future: Future.wait([
+                        getCarName(carId),
+                        getUserName(userId),
+                      ]),
+                      builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtienen los datos.
+                        }
+                        if (snapshot.hasError) {
+                          return Text('Error al obtener los datos: ${snapshot.error}');
+                        }
+                        if (!snapshot.hasData) {
+                          return Text('No hay datos disponibles');
+                        }
+
+                        String carName = snapshot.data![0];
+                        String userName = snapshot.data![1];
+
+
+                        return Center(
+                          child: Container(
+                            margin: const EdgeInsets.all(10),
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              color: Colors.blue[50],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(Icons.car_repair_rounded),
+                                  iconSize: 32,
+                                ),
+                                const SizedBox(width: 10),
+                                GestureDetector(
+                                  onTap: () {
+                                    if (!context.mounted) return;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>  InspectionScreen(
+                                          inspectionId: inspections[index].id,
+
+
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(inspectionData['title'], style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+                                        Text(carName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
+                                        Text(userName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
+                                        Text("Fecha estimada: ${date}", style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              );
+            },
+          ),
+          const SizedBox(height: 10,),
+        ],
+      ),
     );
   }
 }
