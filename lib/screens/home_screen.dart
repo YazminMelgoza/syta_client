@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
+import 'package:syta_client/screens/pending_inspections.dart';
 import 'package:syta_client/screens/welcome_screen.dart';
 import 'package:syta_client/screens/inspection_screen.dart';
 import 'package:syta_client/screens/locations_screen.dart';
@@ -51,20 +52,19 @@ class _HomeScreenState extends State<HomeScreen> {
               Text(ap.userModel.name),
               Text(ap.userModel.phoneNumber),
               Text(ap.userModel.email),
-              ElevatedButton(
-                onPressed: ()
-                {
+             ElevatedButton(
+                onPressed: () {
                   if (!context.mounted) return;
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const InspectionScreen(
-                          inspectionId: 'FXfQn1uzcQFDa1DF7AD5'
+                      builder: (context) => PendingInspections(
+                        userId: ap.userModel.uid, // Pasa el userId
                       ),
                     ),
                   );
                 },
-                child: const Text('Inspeccion FXfQn1uzcQFDa1DF7AD5'),
+                child: const Text('Inspecciones pendientes'),
               ),
               ElevatedButton(
                 onPressed: ()
