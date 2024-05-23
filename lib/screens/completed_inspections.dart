@@ -6,10 +6,12 @@ import 'package:syta_client/screens/inspection_screen.dart';
 class CompletedInspections extends StatelessWidget {
   final String carName;
   final String userId;
+  final String carIdHistorial;
 
   const CompletedInspections({
     required this.carName,
     required this.userId,
+    required this.carIdHistorial,
   });
 
   @override
@@ -46,7 +48,7 @@ class CompletedInspections extends StatelessWidget {
           return StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection('inspections')
-                .where('carId', isEqualTo: carId)
+                .where('carId', isEqualTo: carIdHistorial)
                 .where('status', isEqualTo: 'FINALIZADO')
                 .snapshots(),
             builder: (context, snapshot) {
@@ -90,25 +92,33 @@ class CompletedInspections extends StatelessWidget {
                             size: 32,
                           ),
                           const SizedBox(width: 10),
-                          GestureDetector(
-                            onTap: () {
-                              if (!context.mounted) return;
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) =>  InspectionScreen(
-                                    inspectionId: documentId,
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                if (!context.mounted) return;
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>  InspectionScreen(
+                                      inspectionId: documentId,
+                                    ),
                                   ),
+                                );
+                              },
+                              child: Container(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(title,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+                                    Text(description,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 1,
+                                      style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
+                                  ],
                                 ),
-                              );
-                            },
-                            child: Container(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(title, style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
-                                  Text(description, style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
-                                ],
                               ),
                             ),
                           ),

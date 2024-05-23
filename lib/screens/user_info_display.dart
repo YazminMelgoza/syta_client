@@ -219,70 +219,76 @@ class _UserScreenState extends State<UserScreen> {
                                   print(car['name']);
                                   return Row(
                                     children: [
-                                       Padding(padding: EdgeInsets.only(top:0, right: 20, left: 20),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            Padding(padding: EdgeInsets.only( left: 15),
-                                              child: Text("Auto: "+car['name'],
+                                      Expanded(
+                                        flex: 4, // 40% del ancho total
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 0, right: 20, left: 30),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Auto: " + car['name'],
                                                 textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize:15,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
                                                   fontWeight: FontWeight.w400,
-                                                ),),
-                                            ),
-                                            Padding(padding: EdgeInsets.only(left: 15),
-                                              child: Text("Modelo: " + car['model'],
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize:15,
-                                                  fontWeight: FontWeight.w400,
-                                                ),),
-                                            ),
-                                            Padding(padding: EdgeInsets.only(left: 15),
-                                              child: Text("Placas: " + car['plates'],
-                                                textAlign: TextAlign.start,
-                                                style: TextStyle(
-                                                  fontSize:15,
-                                                  fontWeight: FontWeight.w400,
-                                                ),),
-                                            ),
-                                          ],
-                                        ),
-                                      ),Padding(padding: EdgeInsets.only(top:10),
-                                          child: Container(
-                                              width: MediaQuery.of(context).size.width * 0.3,
-                                              height: MediaQuery.of(context).size.width * 0.3,
-                                              decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.circular(10),
-                                                color: Colors.indigo,
-                                              ),
-                                              child:
-                                              Padding(
-                                                padding: EdgeInsets.only(left: 0),
-                                                child: IconButton(
-                                                  icon: Icon(
-                                                    Icons.car_repair_rounded, // Utiliza el icono de carro de la librería de iconos de Flutter
-                                                    size: 80, // Especifica el tamaño del icono según tus preferencias
-                                                    color: Colors.white, // Cambia el color del icono a blanco
-                                                  ),
-                                                  onPressed: () {
-                                                    Navigator.push(
-                                                      context,
-                                                      MaterialPageRoute(
-                                                        builder: (context) => CompletedInspections(
-                                                          carName: car['name'].toString(),
-                                                          userId: ap.userModel.uid.toString(),
-                                                        ),
-                                                      ),
-                                                    );
-                                                  },
                                                 ),
-                                              )
-                                          )
+                                              ),
+                                              Text(
+                                                "Modelo: " + car['model'],
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Placas: " + car['plates'],
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3, // 30% del ancho total
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 10, right: 30, left: 0, bottom: 10),
+                                          child: Container(
+
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: Colors.indigo,
+                                            ),
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.car_repair_rounded,
+                                                size: 80,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => CompletedInspections(
+                                                      carName: car['name'].toString(),
+                                                      userId: ap.userModel.uid.toString(),
+                                                      carIdHistorial: car.id,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ],
                                   );
+
                                 },
                             );
                         }
