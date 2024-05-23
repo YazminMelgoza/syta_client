@@ -55,7 +55,6 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Carros',
             backgroundColor: colors.primary,
           ),
-
         ],
       ),
     );
