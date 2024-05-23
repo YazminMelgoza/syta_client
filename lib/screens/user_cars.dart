@@ -35,7 +35,11 @@ class CarData extends StatelessWidget {
               return Scaffold(body: Center(child: Text('Error: ${carSnapshot.error}')));
             }
 
-            final List<Map<String, dynamic>> carsData = carSnapshot.data!.docs.map((doc) => doc.data() as Map<String, dynamic>).toList();
+            final List<Map<String, dynamic>> carsData = carSnapshot.data!.docs.map((doc) {
+              final data = doc.data() as Map<String, dynamic>;
+              data['id'] = doc.id;
+              return data;
+            }).toList();
 
             return Scaffold(
               appBar: AppBar(
@@ -80,6 +84,7 @@ class CarData extends StatelessWidget {
                                   builder: (context) => CompletedInspections(
                                     carName: carData['name'].toString(),
                                     userId: ap.userModel.uid.toString(),
+                                    carIdHistorial: carData['id'],
                                   ),
                                 ),
                               );

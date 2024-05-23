@@ -149,29 +149,33 @@ class _HomeScreenState extends State<HomeScreen> {
                                   iconSize: 32,
                                 ),
                                 const SizedBox(width: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    if (!context.mounted) return;
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>  InspectionScreen(
-                                          inspectionId: inspections[index].id,
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (!context.mounted) return;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>  InspectionScreen(
+                                            inspectionId: inspections[index].id,
 
 
+                                          ),
                                         ),
+                                      );
+                                    },
+                                    child: Container(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(inspectionData['title'],
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+                                          Text(carName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
+                                          Text(userName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
+                                          Text("Fecha estimada: ${date}", style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
+                                        ],
                                       ),
-                                    );
-                                  },
-                                  child: Container(
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(inspectionData['title'], style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
-                                        Text(carName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
-                                        Text(userName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
-                                        Text("Fecha estimada: ${date}", style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
-                                      ],
                                     ),
                                   ),
                                 ),
