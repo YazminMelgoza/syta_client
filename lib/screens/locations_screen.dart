@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/screens/home_screen.dart';
-import 'package:syta_client/screens/inspection_detail_screen.dart';
-import 'package:syta_client/screens/inspection_Adddetail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -62,7 +59,7 @@ class _LocationsScreen extends State<LocationsScreen> {
               children: [
                 Text("Disponibilidad de Sucursales",textAlign: TextAlign.left,
                   style: TextStyle(
-                    fontSize: 20, // Tamaño del título
+                    fontSize: 19, // Tamaño del título
                     fontWeight: FontWeight.bold, // Negrita para un aspecto de título
                   ),
                 ),
@@ -85,7 +82,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                                 
                                 child:
                                 Text(
-                                  "Disponibilidad Alta",
+                                  "Disponibilidad Baja",
                                   style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,fontSize: 18,),
                                 ),
                               ),
@@ -107,7 +104,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                                 margin: EdgeInsets.only(bottom: 10),
                                 child:
                                 Text(
-                                  "Disponibilidad Baja",
+                                  "Disponibilidad Alta",
                                   style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,fontSize: 18,),
                                 ),
                               ),
@@ -166,27 +163,21 @@ class _LocationsScreen extends State<LocationsScreen> {
 
                     return Center(
                       child: Container(
-                        //width: 200,
-
                         margin: EdgeInsets.all(10),
                         padding: EdgeInsets.all(10),
+                        width: screenWidth - 40,
                         decoration: BoxDecoration(
                           color: (locationAvaliable=="high") ? Colors.redAccent : (locationAvaliable=="medium") ? Colors.yellowAccent : Colors.greenAccent,
-
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
-                          //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                           children: [
-                            (locationAvaliable=="high") ? Icon(Icons.lock_open_sharp) : (locationAvaliable=="medium") ? Icon(Icons.lock_open_rounded) : Icon(Icons.lock_clock),
+                            (locationAvaliable=="high") ? Icon(Icons.lock) : (locationAvaliable=="medium") ? Icon(Icons.lock_clock_rounded) : Icon(Icons.lock_open_rounded),
 
                             SizedBox(width: 10),
                             GestureDetector(
-                                onTap: () {
-                                },
                                 child: Container(
-                                  width: screenWidth * 0.8,
+                                  width: screenWidth * 0.8 -40,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
