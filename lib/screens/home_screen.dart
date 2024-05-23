@@ -133,7 +133,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         String userName = snapshot.data![1];
 
 
-                        return Center(
+                        return 
+                        GestureDetector(
+                        onTap: () {
+                          if (!context.mounted) return;
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>  InspectionScreen(
+                                inspectionId: inspections[index].id,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Center(
                           child: Container(
                             margin: const EdgeInsets.all(10),
                             padding: const EdgeInsets.all(10),
@@ -143,44 +156,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             child: Row(
                               children: [
-                                IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(Icons.car_repair_rounded),
-                                  iconSize: 32,
+                                const Icon(
+                                    Icons.car_repair_rounded,
+                                    size: 32,
+                                    color: Colors.blue,
                                 ),
                                 const SizedBox(width: 10),
                                 Expanded(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (!context.mounted) return;
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>  InspectionScreen(
-                                            inspectionId: inspections[index].id,
-
-
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Container(
-                                      child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(inspectionData['title'],
-                                            overflow: TextOverflow.ellipsis,
-                                            style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
-                                          Text(carName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
-                                          Text(userName, style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
-                                          Text("Fecha estimada: ${date}", style: TextStyle(fontSize: 12),textAlign: TextAlign.left,),
-                                        ],
-                                      ),
-                                    ),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(inspectionData['title'],
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(fontSize: 16,fontWeight: FontWeight.bold,),),
+                                      Text(carName, style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
+                                      Text(userName, style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold,),),
+                                      Text("Fecha estimada: $date", style: const TextStyle(fontSize: 12),textAlign: TextAlign.left,),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
+                          ),
                           ),
                         );
                       },
