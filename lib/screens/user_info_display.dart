@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart' as firebase_auth_providers;
 import 'package:syta_client/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
+
+import 'completed_inspections.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -42,13 +46,23 @@ class _UserScreenState extends State<UserScreen> {
             Row(
               children: [  // Added children property
                 Padding(  // Add padding for left margin
-                  padding: const EdgeInsets.only(left: 32.0, top: 35.2),  // Adjust padding as needed
-                  child: Text(
-                    ap.userModel.name,
-                    style: const TextStyle(
-                      fontSize: 25.0,  // Increase font size
-                      fontWeight: FontWeight.bold,  // Make text bold
-                    ),
+                  padding: EdgeInsets.only(left: 32.0, top: 10),  // Adjust padding as needed
+                  child: Row(
+                    children: [
+                      Text(
+                        ap.userModel.name,
+                        style: TextStyle(
+                          fontSize: 25.0,  // Increase font size
+                          fontWeight: FontWeight.bold,  // Make text bold
+                        ),
+                      ),
+                      SizedBox(width: 100),
+                      CircleAvatar(
+                        backgroundColor: Theme.of(context).colorScheme.secondary,
+                        backgroundImage: NetworkImage(ap.userModel.profilePicture),
+                        radius: 30,
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -56,7 +70,7 @@ class _UserScreenState extends State<UserScreen> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(padding: EdgeInsets.only(left: 32.0, top: 32),
+                Padding(padding: EdgeInsets.only(left: 32.0, top: 10),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -180,115 +194,106 @@ class _UserScreenState extends State<UserScreen> {
                           fontSize:20,
                           fontWeight: FontWeight.w500,
                         ),),
-                      Row(
-                        children: [
-                          Padding(padding: EdgeInsets.only(top:10),
-                          child: Container(
-                              width: MediaQuery.of(context).size.width * 0.3,
-                              height: MediaQuery.of(context).size.width * 0.3,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: Colors.indigo,
-                              ),
-                              child:
-                              Padding(padding: EdgeInsets.only(left: 10),
-                                child:
-                                Image(
-                                    image: AssetImage('assets/preview-928x522.jpg'),  // Specify image asset
-                                    fit: BoxFit.cover,
-                          )
-                              )
-                          )
-                          ),
-                          const Padding(padding: EdgeInsets.only(top:0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(padding: EdgeInsets.only( left: 15),
-                                child: Text("Auto: Nissan versa",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize:15,
-                                    fontWeight: FontWeight.w400,
-                                  ),),
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 15),
-                                child: Text("Modelo: Versa Ultimate",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize:15,
-                                    fontWeight: FontWeight.w400,
-                                  ),),
-                              ),
-                              Padding(padding: EdgeInsets.only(left: 15),
-                                child: Text("Año: 2016",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    fontSize:15,
-                                    fontWeight: FontWeight.w400,
-                                  ),),
-                              ),
-                            ],
-                          ),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          const Padding(padding: EdgeInsets.only(top:0, right: 10),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Padding(padding: EdgeInsets.only( left: 15),
-                                  child: Text("Auto: Volkswagen Vento",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize:15,
-                                      fontWeight: FontWeight.w400,
-                                    ),),
-                                ),
-                                Padding(padding: EdgeInsets.only(left: 15),
-                                  child: Text("Modelo: Vento Ultra Auto",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize:15,
-                                      fontWeight: FontWeight.w400,
-                                    ),),
-                                ),
-                                Padding(padding: EdgeInsets.only(left: 15),
-                                  child: Text("Año: 2020home_screen.dart",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      fontSize:15,
-                                      fontWeight: FontWeight.w400,
-                                    ),),
-                                ),
-                              ],
-                            ),
-                          ),Padding(padding: EdgeInsets.only(top:10),
-                              child: Container(
-                                  width: MediaQuery.of(context).size.width * 0.3,
-                                  height: MediaQuery.of(context).size.width * 0.3,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.indigo,
-                                  ),
-                                  child:
-                                  Padding(padding: EdgeInsets.only(left: 10),
-                                      child:
-                                      Image(
-                                        image: AssetImage('assets/preview-928x522.jpg'),  // Specify image asset
-                                        fit: BoxFit.cover,
-                                      )
-                                  )
-                              )
-                          ),
-                        ],
-                      )
                     ],
                   ),)
               ],
             ),
+            Expanded(
+                child: StreamBuilder<QuerySnapshot>(
+                        stream: FirebaseFirestore.instance.collection('cars').where('actualUserId', isEqualTo: ap.userModel.uid).snapshots(),
+                        builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                            return CircularProgressIndicator(); // Muestra un indicador de carga mientras se obtienen los datos.
+                            }
+                            if (snapshot.hasError) {
+                            return Text('Error al obtener los datos: ${snapshot.error}');
+                            }
+                            if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                            return Text('No hay datos disponibles'); // Muestra un mensaje si no hay datos disponibles.
+                            }
+                            return ListView.builder(
+                                itemCount: snapshot.data!.docs.length,
+                                itemBuilder: (BuildContext context, int index)
+                                {
+                                  DocumentSnapshot car = snapshot.data!.docs[index];
+                                  print(car['name']);
+                                  return Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 4, // 40% del ancho total
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 0, right: 20, left: 30),
+                                          child: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                "Auto: " + car['name'],
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Modelo: " + car['model'],
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                              Text(
+                                                "Placas: " + car['plates'],
+                                                textAlign: TextAlign.start,
+                                                style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        flex: 3, // 30% del ancho total
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(top: 10, right: 30, left: 0, bottom: 10),
+                                          child: Container(
+
+                                            decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(10),
+                                              color: Colors.indigo,
+                                            ),
+                                            child: IconButton(
+                                              icon: const Icon(
+                                                Icons.car_repair_rounded,
+                                                size: 80,
+                                                color: Colors.white,
+                                              ),
+                                              onPressed: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) => CompletedInspections(
+                                                      carName: car['name'].toString(),
+                                                      userId: ap.userModel.uid.toString(),
+                                                      carIdHistorial: car.id,
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+
+                                },
+                            );
+                        }
+                        )
+            )
           ],
 
       /*mainAxisAlignment: MainAxisAlignment.center,
