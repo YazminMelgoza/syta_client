@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             return Text('Error al obtener los datos: ${snapshot.error}');
                           }
                           if (!snapshot.hasData) {
-                            return Text('No hay datos disponibles');
+                            return Text('No hay dato disponibles');
                           }
 
                           String carName = snapshot.data![0];
