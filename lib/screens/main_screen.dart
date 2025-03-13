@@ -36,24 +36,26 @@ class _MainScreenState extends State<MainScreen> {
           });
         },
         elevation: 0,
+        selectedItemColor: const Color(0xFF1A1A77),
+        unselectedItemColor: const Color(0xFF333333),
         items: [
           BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            activeIcon: const Icon(Icons.home_filled),
-            label: 'Inicio',
-            backgroundColor: colors.primary,
+            icon: const Icon(Icons.directions_car),
+            activeIcon: const Icon(Icons.directions_car_filled),
+            label: 'Revisiones',
+            backgroundColor: const Color(0xFFF5F5F5),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.location_city_outlined),
-            activeIcon: const Icon(Icons.location_city),
+            icon: const Icon(Icons.store_outlined),
+            activeIcon: const Icon(Icons.store),
             label: 'Sucursales',
-            backgroundColor: colors.primary,
+            backgroundColor: const Color(0xFFF5F5F5),
           ),
           BottomNavigationBarItem(
-            icon: const Icon(Icons.car_rental_outlined),
-            activeIcon: const Icon(Icons.car_rental),
-            label: 'Carros',
-            backgroundColor: colors.primary,
+            icon: const Icon(Icons.account_circle_outlined),
+            activeIcon: const Icon(Icons.account_circle),
+            label: 'Perfil',
+            backgroundColor: const Color(0xFFF5F5F5),
           ),
 
         ],

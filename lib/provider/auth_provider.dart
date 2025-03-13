@@ -106,6 +106,22 @@ class AuthProvider extends ChangeNotifier {
 
   // DATABASE OPERTAIONS
   Future<bool> checkExistingUser() async {
+    var respuesta = false;
+    try {
+      final user = _firebaseAuth.currentUser;
+      if (user != null) {
+        _uid = user.uid;
+        notifyListeners();
+        respuesta = true;
+      } else {
+        respuesta = false;
+      }
+    } catch (e) {
+      print("Error al obtener el usuario: $e");
+      respuesta = false;
+    }
+    return respuesta;
+    /*
     DocumentSnapshot snapshot =
         await _firebaseFirestore.collection("users").doc(_uid).get();
     if (snapshot.exists) {
@@ -115,6 +131,7 @@ class AuthProvider extends ChangeNotifier {
       print("NEW USER");
       return false;
     }
+     */
   }
 
   void saveUserDataToFirebase({

@@ -21,11 +21,10 @@ class OtpScreen extends StatefulWidget {
 
 class _OtpScreenState extends State<OtpScreen> {
   String? otpCode;
-
+  bool isButtonDisabled = false;
   @override
   Widget build(BuildContext context) {
-    final isLoading =
-        Provider.of<AuthProvider>(context, listen: true).isLoading;
+    final isLoading = Provider.of<AuthProvider>(context, listen: true).isLoading;
     return Scaffold(
       body: SafeArea(
         child: isLoading == true
@@ -107,9 +106,12 @@ class _OtpScreenState extends State<OtpScreen> {
                           width: MediaQuery.of(context).size.width,
                           child: CustomButton(
                             text: "Validar",
-                            isDisabled: otpCode?.length != 6,
+                            isDisabled: otpCode?.length != 6 || isButtonDisabled,
                             onPressed: () {
                               if (otpCode != null) {
+                                setState(() {
+                                  isButtonDisabled = true;
+                                });
                                 verifyOtp(context, otpCode!);
                               } else {
                                 showSnackBar(context, "Enter 6-Digit code");
@@ -183,3 +185,5 @@ class _OtpScreenState extends State<OtpScreen> {
     );
   }
 }
+
+

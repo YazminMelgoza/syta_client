@@ -1,5 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:syta_client/screens/home_screen.dart';
+import 'package:syta_client/screens/main_screen.dart';
 import 'package:syta_client/screens/welcome_screen.dart';
 import 'package:syta_client/firebase_options.dart';
 import 'package:provider/provider.dart';
@@ -43,8 +45,47 @@ class MyApp extends StatelessWidget {
           )
           
         ),
-        home: const WelcomeScreen(),
+        home: const AuthWrapper(),
       )
     );
   }
 }
+class AuthWrapper extends StatefulWidget {
+  const AuthWrapper({super.key});
+
+  @override
+  State<AuthWrapper> createState() => _AuthWrapperState();
+}
+
+class _AuthWrapperState extends State<AuthWrapper> {
+  bool isLoading = true;
+  bool isAuthenticated = false;
+
+  @override
+  void initState() {
+    super.initState();
+    checkUserSession();
+  }
+
+  Future<void> checkUserSession() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    isAuthenticated = await authProvider.checkExistingUser();
+
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
+    return isAuthenticated ? const MainScreen() : const WelcomeScreen();
+  }
+}
+

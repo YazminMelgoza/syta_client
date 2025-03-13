@@ -12,6 +12,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+
   final TextEditingController phoneController = TextEditingController();
   Country selectedCountry = Country(
     phoneCode: "52",
@@ -28,6 +29,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     phoneController.selection = TextSelection.fromPosition(
       TextPosition(
         offset: phoneController.text.length
@@ -149,8 +151,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void sendPhoneNumber() {
+
     final ap = Provider.of<AuthProvider>(context, listen: false);
     String phoneNumber = phoneController.text.trim();
     ap.signInWithPhone(context, "+${selectedCountry.phoneCode}$phoneNumber");
+
   }
 }

@@ -6,6 +6,9 @@ import 'package:syta_client/screens/inspection_detail_screen.dart';
 import 'package:syta_client/screens/inspection_Adddetail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
+import '../widgets/header.dart';
 
 class LocationsScreen extends StatefulWidget {
 
@@ -29,111 +32,11 @@ class _LocationsScreen extends State<LocationsScreen> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        title: Text("SYTA  ${ap.userModel.name}", style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),),
-        actions: [
-          IconButton(
-            onPressed: () {
-              ap.userSignOut().then(
-                    (value) => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const HomeScreen(),
-                      ),
-                    ),
-                  );
-            },
-            icon: const Icon(Icons.exit_to_app, color: Colors.white),
-          ),
-        ],
-      ),
-      body: Center(
+      appBar: CustomAppBar(titulo: "Sucursales"),
+      body: Container(
+          color: const Color(0xFFF5F5F5),
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-
-          SizedBox(width: 10),
-          Container(
-            margin:EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("Disponibilidad de Sucursales",textAlign: TextAlign.left,
-                  style: TextStyle(
-                    fontSize: 20, // Tamaño del título
-                    fontWeight: FontWeight.bold, // Negrita para un aspecto de título
-                  ),
-                ),
-                IconButton(onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: Text("Información de colores"),
-                        content: Container(
-                          height: 200,
-                          padding: EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Container(
-                                width: double.infinity,
-                                color: Colors.redAccent,
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.only(bottom: 10),
-                                
-                                child:
-                                Text(
-                                  "Disponibilidad Alta",
-                                  style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,fontSize: 18,),
-                                ),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                color: Colors.yellowAccent,
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.only(bottom: 10),
-                                child:
-                                Text(
-                                  "Disponibilidad Media",
-                                  style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,fontSize: 18,),
-                                ),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                color: Colors.greenAccent,
-                                padding: EdgeInsets.all(10),
-                                margin: EdgeInsets.only(bottom: 10),
-                                child:
-                                Text(
-                                  "Disponibilidad Baja",
-                                  style: TextStyle(color: Colors.black54, fontWeight: FontWeight.bold,fontSize: 18,),
-                                ),
-                              ),
-
-                            ],
-                          ),
-                        ),
-                        actions: <Widget>[
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text('Cerrar'),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                    icon: Icon(Icons.info_outline),
-                ),
-              ],
-            ),
-          ),
-
-          SizedBox(width: 10),
+          children: [
           StreamBuilder<QuerySnapshot>(
             stream: _firebaseFirestore.collection('locations').snapshots(),
             builder: (context, snapshot)
@@ -166,27 +69,23 @@ class _LocationsScreen extends State<LocationsScreen> {
 
                     return Center(
                       child: Container(
-                        //width: 200,
-
-                        margin: EdgeInsets.all(10),
-                        padding: EdgeInsets.all(10),
+                        margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                        padding: const EdgeInsets.only(top: 15, bottom: 20, left: 10, right: 10),
                         decoration: BoxDecoration(
-                          color: (locationAvaliable=="high") ? Colors.redAccent : (locationAvaliable=="medium") ? Colors.yellowAccent : Colors.greenAccent,
-
+                          color: Color(0xFFFFFCF6),
                           borderRadius: BorderRadius.circular(10),
+                          border: Border(
+                            bottom: BorderSide(
+                              color: const Color(0xFF333333).withOpacity(0.25), // Color con 25% de opacidad
+                              width: 2, // Ajusta el grosor del borde según necesidad
+                            ),
+                          ),
                         ),
                         child: Row(
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                           children: [
-                            (locationAvaliable=="high") ? Icon(Icons.lock_open_sharp) : (locationAvaliable=="medium") ? Icon(Icons.lock_open_rounded) : Icon(Icons.lock_clock),
-
-                            SizedBox(width: 10),
-                            GestureDetector(
-                                onTap: () {
-                                },
+                            Expanded(
                                 child: Container(
-                                  width: screenWidth * 0.8,
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,19 +97,55 @@ class _LocationsScreen extends State<LocationsScreen> {
                                           ),
                                           Text(
                                             locationPhone,
-                                            style: TextStyle(fontSize: 14),
+                                            style: TextStyle(fontSize: 16),
                                             textAlign: TextAlign.left,
                                           ),
                                       Text(
                                         locationAddress,
                                         softWrap: true,
-                                        style: TextStyle(fontSize: 12),
+                                        style: TextStyle(fontSize: 16),
                                         textAlign: TextAlign.left,
                                       ),
                                     ],
                                   ),
                                 )
                             ),
+                            Container(
+                              width: 100,
+                              child: Column(
+                                children: [
+                                  SvgPicture.asset(
+                                    'assets/storeSVG.svg', // Ruta del archivo SVG en tu carpeta de assets
+                                    width: 32, // Ajusta el tamaño del SVG
+                                    height: 32, // Ajusta el tamaño del SVG
+                                    color: locationAvaliable == "high"
+                                        ? Color(0xFFD33D30) // Rojo
+                                        : locationAvaliable == "medium"
+                                        ? Color(0xFFFFA11D) // Naranja
+                                        : Color(0xFF62BA5E), // Verde
+                                  ),
+                                  Text(
+                                    locationAvaliable == "high"
+                                        ? "No Disponible"
+                                        : locationAvaliable == "medium"
+                                        ? "Poco Disponible"
+                                        : "Disponible",
+                                    overflow: TextOverflow.visible,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: locationAvaliable == "high"
+                                          ? Color(0xFFD33D30) // Rojo
+                                          : locationAvaliable == "medium"
+                                          ? Color(0xFFFFA11D) // Naranja
+                                          : Color(0xFF62BA5E), // Verde
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       ),
