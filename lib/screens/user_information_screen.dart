@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart' as firebase;
 import 'package:flutter/material.dart';
 import 'package:syta_client/model/user_model.dart';
 import 'package:syta_client/provider/auth_provider.dart';
@@ -8,6 +9,8 @@ import 'package:syta_client/utils/show_snack_bar.dart';
 import 'package:syta_client/utils/pick_image.dart';
 import 'package:syta_client/widgets/custom_button.dart';
 import 'package:provider/provider.dart';
+
+import '../widgets/header.dart';
 
 class UserInfromationScreen extends StatefulWidget {
   const UserInfromationScreen({super.key});
@@ -21,6 +24,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final bioController = TextEditingController();
+  final user = firebase.FirebaseAuth.instance.currentUser;
 
   @override
   void dispose() {
@@ -40,7 +44,10 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
   Widget build(BuildContext context) {
     final isLoading =
         Provider.of<AuthProvider>(context, listen: true).isLoading;
+
+
     return Scaffold(
+      appBar: CustomAppBar(titulo: "Editar Perfil"),
       body: SafeArea(
         child: isLoading == true
             ? Center(
@@ -57,8 +64,8 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                       InkWell(
                         onTap: () => selectImage(),
                         child: image == null
-                            ? const CircleAvatar(
-                                backgroundColor: Colors.purple,
+                            ? CircleAvatar(
+                                backgroundColor: Theme.of(context).colorScheme.secondary,
                                 radius: 50,
                                 child: Icon(
                                   Icons.account_circle,
@@ -72,11 +79,13 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                               ),
                       ),
                       Container(
+
                         width: MediaQuery.of(context).size.width,
                         padding: const EdgeInsets.symmetric(
-                            vertical: 5, horizontal: 15),
+                            vertical: 5, horizontal: 20),
                         margin: const EdgeInsets.only(top: 20),
                         child: Column(
+
                           children: [
                             // name field
                             textFeld(
@@ -103,7 +112,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
                         height: 50,
                         width: MediaQuery.of(context).size.width * 0.90,
                         child: CustomButton(
-                          text: "Continuar",
+                          text: "Guardar Cambios",
                           onPressed: () => storeData(),
                         ),
                       )
@@ -131,7 +140,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
         maxLines: maxLines,
         decoration: InputDecoration(
           prefixIcon: Container(
-            margin: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
               color: Theme.of(context).colorScheme.secondary,
@@ -166,6 +175,8 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
 
   // store user data to database
   void storeData() async {
+
+
     final ap = Provider.of<AuthProvider>(context, listen: false);
     UserModel userModel = UserModel(
       name: nameController.text.trim(),
@@ -176,6 +187,7 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
       uid: "",
     );
     if (image != null) {
+
       ap.saveUserDataToFirebase(
         context: context,
         userModel: userModel,
@@ -183,13 +195,10 @@ class _UserInfromationScreenState extends State<UserInfromationScreen> {
         onSuccess: () {
           ap.saveUserDataToSP().then(
                 (value) => ap.setSignIn().then(
-                      (value) => Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ),
-                          (route) => false),
+                      (value) => Navigator.pop(
+                          context
                     ),
+                ),
               );
         },
       );

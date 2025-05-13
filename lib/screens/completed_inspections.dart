@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:syta_client/screens/inspection_screen.dart';
 
+import '../widgets/header.dart';
+
 class CompletedInspections extends StatelessWidget {
   final String carName;
   final String userId;
@@ -17,14 +19,7 @@ class CompletedInspections extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Colors.white,
-        title: const Text(
-          "Revisiones Finalizadas",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      ),
+      appBar: CustomAppBar(titulo: "Historial"),
       body: FutureBuilder<QuerySnapshot>(
         future: FirebaseFirestore.instance
             .collection('cars')

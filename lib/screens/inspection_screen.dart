@@ -70,29 +70,54 @@ class _InspectionScreenState extends State<InspectionScreen> {
     final ap = Provider.of<AuthProvider>(context, listen: false);
 
     return isLoading ? const Center(child: CircularProgressIndicator()) : Scaffold(
-      appBar:  CustomAppBar(titulo: inspectionData['title'] ),
+      appBar:  CustomAppBar(titulo: "Detalles" ),
       body: Container(
           color: const Color(0xFFF5F5F5),
           child: Column(
             children: [
-              /*
+
               Container(
-                margin: const EdgeInsets.only(top: 5, bottom: 5, left: 10, right: 10),
+                margin: const EdgeInsets.only(top: 20, bottom: 5, left: 10, right: 10),
                 child: Row(
                   children: [
                     Expanded(
                       child: Column(
                         children: [
-                          Text(inspectionData['title']),
-                          Text("data"),
+                          Text(
+                            '${inspectionData['title']}',
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Text(
+                            inspectionData['status'],
+                          )
+
                         ],
                       ),
                     ),
-                    Text("Boton"),
+                    Image.asset(
+                      'assets/img/herramientas.png',
+                      height: 40,
+                      fit: BoxFit.contain,
+                    ),
                   ],
                 ),
               ),
-              */
+              SizedBox(height: 10,),
+              Container(
+                height: 1,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Color(0xFFFF6A00),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
+                ),
+              ),
+              SizedBox(height: 10,),
+
 
               StreamBuilder<QuerySnapshot>(
                 stream: _firebaseFirestore.collection('inspectionDetails').where("inspectionId", isEqualTo: widget.inspectionId).snapshots(),

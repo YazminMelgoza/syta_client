@@ -140,6 +140,7 @@ class AuthProvider extends ChangeNotifier {
     required File profilePic,
     required Function onSuccess,
   }) async {
+    final user = FirebaseAuth.instance.currentUser;
     _isLoading = true;
     notifyListeners();
     try {
@@ -149,6 +150,12 @@ class AuthProvider extends ChangeNotifier {
         userModel.createdAt = DateTime.now().millisecondsSinceEpoch.toString();
         userModel.phoneNumber = _firebaseAuth.currentUser!.phoneNumber!;
         userModel.uid = _uid!;
+
+        if (user != null) {
+           user.updateDisplayName(userModel.name);
+           user.updatePhotoURL(userModel.profilePicture);
+           user.reload();
+        }
       });
       _userModel = userModel;
 

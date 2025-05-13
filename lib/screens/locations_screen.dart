@@ -76,7 +76,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                           borderRadius: BorderRadius.circular(10),
                           border: Border(
                             bottom: BorderSide(
-                              color: const Color(0xFF333333).withOpacity(0.25), // Color con 25% de opacidad
+                              color: const Color(0xFF333333).withOpacity(0.25),
                               width: 2, // Ajusta el grosor del borde según necesidad
                             ),
                           ),

@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart' as firebase_auth_providers;
+import 'package:syta_client/screens/user_cars.dart';
+import 'package:syta_client/screens/user_information_screen.dart';
 import 'package:syta_client/screens/welcome_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -42,17 +44,23 @@ class _UserScreenState extends State<UserScreen> {
                       borderRadius: BorderRadius.circular(10),
                       border: Border(
                         bottom: BorderSide(
-                          color: const Color(0xFF333333).withOpacity(0.25), // Color con 25% de opacidad
-                          width: 2, // Ajusta el grosor del borde según necesidad
+                          color: const Color(0xFF333333).withOpacity(0.25),
+                          width: 2,
                         ),
                       ),
                     ),
                     child: Column(
                       children: [
-                        Icon(
+
+                        user?.photoURL   != null
+                            ? CircleAvatar(
+                          backgroundImage: NetworkImage(user!.photoURL!),
+                          radius: 50,
+                        )
+                            : Icon(
                           Icons.account_circle,
-                          size: 100, // Tamaño del icono
-                          color: Color(0xFF121230), // Color del icono
+                          size: 100,
+                          color: Color(0xFF121230),
                         ),
                         Row(
                           children: [
@@ -77,10 +85,18 @@ class _UserScreenState extends State<UserScreen> {
                                 ),
                               ),
                             ),
-                            Icon(
-                              Icons.edit,
-                              size: 24, // Tamaño del icono
-                              color: Color(0xFF121230), // Color del icono
+                            IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                size: 24,
+                                color: Color(0xFF121230),
+                              ),
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => UserInfromationScreen()),
+                                );
+                              },
                             ),
                           ],
                         ),
@@ -106,7 +122,12 @@ class _UserScreenState extends State<UserScreen> {
                           backgroundColor: Color(0xFF1A1A77),
                           textColor: Color(0xFFF5F5F5),
                           onTap: () {
-                            print("Ver mis autos");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CarData(uid: user.uid),
+                              ),
+                            );
                           },
                         ),
                       ],
@@ -123,6 +144,14 @@ class _UserScreenState extends State<UserScreen> {
                 backgroundColor: Color(0xFFD33D30),
                 textColor: Color(0xFFF5F5F5),
                 onTap: () {
+                  ap.userSignOut().then(
+                        (value) => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WelcomeScreen(),
+                      ),
+                    ),
+                  );
 
                 },
               ),

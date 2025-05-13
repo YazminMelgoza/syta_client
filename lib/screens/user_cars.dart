@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:syta_client/provider/auth_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:syta_client/screens/completed_inspections.dart';
 import 'package:syta_client/screens/welcome_screen.dart';
+import 'package:syta_client/provider/auth_provider.dart' as firebase_auth_providers;
+
+import '../widgets/header.dart';
 
 class CarData extends StatelessWidget {
-  const CarData({Key? key}) : super(key: key);
+  final String uid;
+  const CarData({Key? key, required this.uid}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
+    final ap = Provider.of<firebase_auth_providers.AuthProvider>(context, listen: false);
 
     return FutureBuilder<DocumentSnapshot>(
-      future: FirebaseFirestore.instance.collection('users').doc(ap.userModel.uid).get(),
+      future: FirebaseFirestore.instance.collection('users').doc(uid).get(),
       builder: (context, userSnapshot) {
         if (userSnapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         if (userSnapshot.hasError) {
           return Scaffold(body: Center(child: Text('Error: ${userSnapshot.error}')));
         }
         if (!userSnapshot.hasData || !userSnapshot.data!.exists) {
-          return Scaffold(body: Center(child: Text('No user data found')));
+          return const Scaffold(body: Center(child: Text('No user data found')));
         }
 
         return FutureBuilder<QuerySnapshot>(
-          future: FirebaseFirestore.instance.collection('cars').where('actualUserId', isEqualTo: ap.userModel.uid).get(),
+          future: FirebaseFirestore.instance
+              .collection('cars')
+              .where('actualUserId', isEqualTo: uid)
+              .get(),
           builder: (context, carSnapshot) {
             if (carSnapshot.connectionState == ConnectionState.waiting) {
-              return Scaffold(body: Center(child: CircularProgressIndicator()));
+              return const Scaffold(body: Center(child: CircularProgressIndicator()));
             }
             if (carSnapshot.hasError) {
               return Scaffold(body: Center(child: Text('Error: ${carSnapshot.error}')));
@@ -42,75 +48,29 @@ class CarData extends StatelessWidget {
             }).toList();
 
             return Scaffold(
-              appBar: AppBar(
-                title: Text(
-                  "Vehículos Personales",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
-                ),
-                actions: [
-                  IconButton(
-                    onPressed: () {
-                      ap.userSignOut().then(
-                            (value) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const WelcomeScreen(),
-                          ),
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.exit_to_app, color: Colors.white),
-                  ),
-                ],
-                backgroundColor: Theme.of(context).colorScheme.primary,
-              ),
+              appBar: CustomAppBar(titulo: "Vehiculos"),
               body: SingleChildScrollView(
                 padding: const EdgeInsets.all(20.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     for (var carData in carsData) ...[
-                      Row(
-                        children: [
-                          Text(
-                            'Auto:',
-                            style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CompletedInspections(
-                                    carName: carData['name'].toString(),
-                                    userId: ap.userModel.uid.toString(),
-                                    carIdHistorial: carData['id'],
-                                  ),
-                                ),
-                              );
-                            },
-                            child: Text(
-                              carData['name'],
-                              style: const TextStyle(fontSize: 18.0),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        'Placas:',
-                        style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      Text(carData['plates'], style: const TextStyle(fontSize: 18.0)),
-                      const SizedBox(height: 10.0),
-                      Text(
-                        'Año:',
-                        style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      Text(carData['model'], style: const TextStyle(fontSize: 18.0)),
-                      const SizedBox(height: 20.0),
+                      CarItem(carData: carData, uid: uid),
                     ],
-                    
+
+                    Row(
+                      children: [
+                        Expanded( // o Flexible
+                          child: Text(
+                            "Presiona sobre cualquiera de los vehículos para ver su historial de reparaciones",
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    )
+
                   ],
                 ),
               ),
@@ -121,3 +81,101 @@ class CarData extends StatelessWidget {
     );
   }
 }
+
+class CarItem extends StatelessWidget {
+  final Map<String, dynamic> carData;
+  final String uid;
+
+  const CarItem({Key? key, required this.carData, required this.uid}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CompletedInspections(
+              carName: carData['name'].toString(),
+              userId: uid,
+              carIdHistorial: carData['id'],
+            ),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 20),
+        decoration: BoxDecoration(
+          color: Color(0xFFFFFCF6),
+          borderRadius: BorderRadius.circular(10),
+          border: Border(
+            bottom: BorderSide(
+              color: const Color(0xFF333333).withOpacity(0.25),
+              width: 2,
+            ),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Text(
+                          'Auto: ',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                        ),
+
+                        Text(
+                          carData['name'],
+                          style: const TextStyle(fontSize: 18.0),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Placas: ',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                        ),
+                        Text(carData['plates'], style: const TextStyle(fontSize: 18.0)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text(
+                          'Año: ',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                        ),
+                        Text(carData['model'], style: const TextStyle(fontSize: 18.0)),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+              SizedBox(width: 10,),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/img/car.png',
+                    height: 40,
+                    fit: BoxFit.contain,
+                  ),
+
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
