@@ -136,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: CustomButton(
-                    text: 'Enviar código de verificación',
+                    text: 'Enviar código de validación',
                     onPressed: () => sendPhoneNumber(),
                     isDisabled: phoneController.text.length < 10
                   )

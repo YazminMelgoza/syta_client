@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/screens/home_screen.dart';
-import 'package:syta_client/screens/inspection_detail_screen.dart';
-import 'package:syta_client/screens/inspection_Adddetail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -36,7 +33,9 @@ class _LocationsScreen extends State<LocationsScreen> {
       body: Container(
           color: const Color(0xFFF5F5F5),
           child: Column(
+
           children: [
+
           StreamBuilder<QuerySnapshot>(
             stream: _firebaseFirestore.collection('locations').snapshots(),
             builder: (context, snapshot)
@@ -73,6 +72,7 @@ class _LocationsScreen extends State<LocationsScreen> {
                         padding: const EdgeInsets.only(top: 15, bottom: 20, left: 10, right: 10),
                         decoration: BoxDecoration(
                           color: Color(0xFFFFFCF6),
+
                           borderRadius: BorderRadius.circular(10),
                           border: Border(
                             bottom: BorderSide(
@@ -82,10 +82,12 @@ class _LocationsScreen extends State<LocationsScreen> {
                           ),
                         ),
                         child: Row(
+
                           //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Expanded(
                                 child: Container(
+
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     crossAxisAlignment: CrossAxisAlignment.start,

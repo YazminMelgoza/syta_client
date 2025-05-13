@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syta_client/provider/auth_provider.dart';
 import 'package:syta_client/screens/pending_inspections.dart';
@@ -104,6 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           String carName = snapshot.data![0];
                           String userName = snapshot.data![1];
 
+
                           return GestureDetector(
                             onTap: () {
                               if (!context.mounted) return;
@@ -112,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 MaterialPageRoute(
                                   builder: (context) =>  InspectionScreen(
                                     inspectionId: inspections[index].id,
+
                                   ),
                                 ),
                               );
@@ -171,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ],
                               ),
                             ),
+
                           );
                         },
                       );

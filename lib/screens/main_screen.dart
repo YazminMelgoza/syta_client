@@ -57,7 +57,6 @@ class _MainScreenState extends State<MainScreen> {
             label: 'Perfil',
             backgroundColor: const Color(0xFFF5F5F5),
           ),
-
         ],
       ),
     );
