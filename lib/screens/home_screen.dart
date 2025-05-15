@@ -99,7 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         enableInfiniteScroll: false,
                         viewportFraction: 0.9,
                       ),
-                      items: inspections.map((doc) {
+                      items: inspections.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        QueryDocumentSnapshot doc = entry.value;
                         Map<String, dynamic> inspectionData =
                         doc.data() as Map<String, dynamic>;
                         String inspectionId = doc.id;
@@ -137,6 +139,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               userName: userName,
                               carName: carName,
                               formattedDate: formattedDate,
+                              totalInspections: inspections.length.toString(),
+                              actualInspection: (index + 1).toString(),
                               onTap: () {
                                 if (!context.mounted) return;
                                 Navigator.push(
@@ -155,9 +159,24 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
               Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/img/scrollArrow.png',
+                      height: 30,
+                      fit: BoxFit.contain,
+                      color: Colors.black.withOpacity(0.4),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
                 padding: EdgeInsets.fromLTRB(20, 10, 20, 5),
-                child: 
-                Text("Puedes presionar sobre alguna de las revisiones para conocer más detalles."),
+                child: Text(
+                  "Puedes presionar sobre alguna de las revisiones para conocer más detalles.",
+                  textAlign: TextAlign.center,
+                ),
               )
             ],
           ),
@@ -173,6 +192,8 @@ class InspectionCard extends StatelessWidget {
   final String userName;
   final String carName;
   final String formattedDate;
+  final String totalInspections;
+  final String actualInspection;
   final VoidCallback onTap;
 
   const InspectionCard({
@@ -182,6 +203,8 @@ class InspectionCard extends StatelessWidget {
     required this.userName,
     required this.carName,
     required this.formattedDate,
+    required this.totalInspections,
+    required this.actualInspection,
     required this.onTap,
   }) : super(key: key);
 
@@ -248,6 +271,15 @@ class InspectionCard extends StatelessWidget {
                   ],
                 ),
               ),
+            ),
+            Text(
+              actualInspection + "/" + totalInspections,
+              style: TextStyle(
+                color: Color(0xFFFF6A00),
+                fontWeight: FontWeight.w800,
+                fontSize: 16,
+              ),
+              overflow: TextOverflow.ellipsis,
             ),
             Container(
               height: 10,

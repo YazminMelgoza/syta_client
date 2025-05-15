@@ -1,24 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:syta_client/provider/auth_provider.dart';
-import 'package:syta_client/screens/home_screen.dart';
-import 'package:syta_client/screens/inspection_detail_screen.dart';
-import 'package:syta_client/screens/inspection_Adddetail_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import 'package:syta_client/screens/main_screen.dart';
 
 import '../widgets/header.dart';
+import 'inspection_detail_screen.dart';
 
-class InspectionScreen extends StatefulWidget {
+class InspectionScreenOnlyView extends StatefulWidget {
   final String inspectionId;
-  const InspectionScreen({super.key,required this.inspectionId});
+  const InspectionScreenOnlyView({super.key,required this.inspectionId});
 
   @override
-  State<InspectionScreen> createState() => _InspectionScreenState();
+  State<InspectionScreenOnlyView> createState() => _InspectionScreenState();
 }
 
-class _InspectionScreenState extends State<InspectionScreen> {
+class _InspectionScreenState extends State<InspectionScreenOnlyView> {
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   bool isChecked = false;
   bool isLoading = true;
@@ -67,7 +63,6 @@ class _InspectionScreenState extends State<InspectionScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    final ap = Provider.of<AuthProvider>(context, listen: false);
 
     return isLoading ? const Center(child: CircularProgressIndicator()) : Scaffold(
       appBar:  CustomAppBar(titulo: "Detalles" ),
